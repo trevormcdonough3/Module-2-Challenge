@@ -43,6 +43,7 @@ Sub Stocks()
             If WorkSheet.Cells(i + 1, 1).Value <> WorkSheet.Cells(i, 1).Value Then
                 TickerSymbol = WorkSheet.Cells(i, 1).Value
                 OpenPrice = WorkSheet.Cells(LastTickerRow, 3).Value
+                'For the LastTickerRow https://www.thespreadsheetguru.com/last-row-column-vba/
                 ClosePrice = WorkSheet.Cells(i, 6).Value
                 YearlyChange = ClosePrice - OpenPrice
                 
