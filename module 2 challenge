@@ -1,3 +1,7 @@
+This is my code for the vba script for the module 2 challenge. I was confused on how do a few things within the code so I provided 
+links under a few parts of the code showcasing how I figured out how to do those parts. It took a lot of trial and error for the 
+rest of the code. 
+
 Sub Stocks()
     
     Dim TickerSymbol As String
