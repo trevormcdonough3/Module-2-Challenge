@@ -1,0 +1,97 @@
+This is my code for the vba script for the module 2 challenge. I was confused on how do a few things within the code so I provided 
+links under a few parts of the code showcasing how I figured out how to do those parts. It took a lot of trial and error for the 
+rest of the code. 
+
+Sub Stocks()
+    
+    Dim TickerSymbol As String
+    Dim OpenPrice As Double
+    Dim ClosePrice As Double
+    Dim YearlyChange As Double
+    Dim PercentageChange As Double
+    Dim TotalVolume As Double
+    Dim GreatestIncrease As Double
+    Dim GreatestDecrease As Double
+    Dim GreatestVolume As Double
+    Dim LastTickerRow As Long
+    Dim i As Long
+    Dim OutputRow As Long
+    Dim FinalRow As Long
+    Dim WorkSheet As WorkSheet
+    
+    For Each WorkSheet In Worksheets
+        LastTickerRow = 2
+        OutputRow = 2
+        GreatestIncrease = 0
+        GreatestDecrease = 0
+        GreatestVolume = 0
+        FinalRow = WorkSheet.Cells(Rows.Count, 1).End(xlUp).Row
+        'I had to look up how to do this https://wellsr.com/vba/2015/excel/find-last-row-end-xlup/
+        
+        
+        WorkSheet.Cells(1, 9).Value = "Ticker"
+        WorkSheet.Cells(1, 10).Value = "Yearly Change"
+        WorkSheet.Cells(1, 11).Value = "Percentage Change"
+        WorkSheet.Cells(1, 12).Value = "Total Stock Volume"
+        WorkSheet.Cells(2, 15).Value = "Greatest % Increase"
+        WorkSheet.Cells(3, 15).Value = "Greatest % Decrease"
+        WorkSheet.Cells(4, 15).Value = "Greatest Total Volume"
+        WorkSheet.Cells(1, 16).Value = "Ticker"
+        WorkSheet.Cells(1, 17).Value = "Value"
+     
+        For i = 2 To FinalRow
+            If WorkSheet.Cells(i + 1, 1).Value <> WorkSheet.Cells(i, 1).Value Then
+                TickerSymbol = WorkSheet.Cells(i, 1).Value
+                OpenPrice = WorkSheet.Cells(LastTickerRow, 3).Value
+                ClosePrice = WorkSheet.Cells(i, 6).Value
+                YearlyChange = ClosePrice - OpenPrice
+                
+                If OpenPrice <> 0 Then
+                    PercentageChange = (YearlyChange / OpenPrice)
+                Else
+                    PercentageChange = 0
+                
+                End If
+                
+                
+                TotalVolume = Application.WorksheetFunction.Sum(WorkSheet.Range(WorkSheet.Cells(LastTickerRow, 7), WorkSheet.Cells(i, 7)))
+                'Also had to look up this function https://www.youtube.com/watch?v=w2qxbBsQp_c
+                WorkSheet.Cells(OutputRow, 9).Value = TickerSymbol
+                WorkSheet.Cells(OutputRow, 10).Value = YearlyChange
+                WorkSheet.Cells(OutputRow, 11).Value = PercentageChange
+                WorkSheet.Cells(OutputRow, 12).Value = TotalVolume
+                
+                
+                
+                If PercentageChange > GreatestIncrease Then
+                    GreatestIncrease = PercentageChange
+                    WorkSheet.Cells(2, 16).Value = TickerSymbol
+                    WorkSheet.Cells(2, 17).Value = PercentageChange
+                
+                End If
+                
+                
+                If PercentageChange < GreatestDecrease Then
+                    GreatestDecrease = PercentageChange
+                    WorkSheet.Cells(3, 16).Value = TickerSymbol
+                    WorkSheet.Cells(3, 17).Value = PercentageChange
+                
+                End If
+                
+                If TotalVolume > GreatestVolume Then
+                    GreatestVolume = TotalVolume
+                    WorkSheet.Cells(4, 16).Value = TickerSymbol
+                    WorkSheet.Cells(4, 17).Value = TotalVolume
+                
+                End If
+                
+                LastTickerRow = i + 1
+                OutputRow = OutputRow + 1
+                
+            End If
+            
+        Next i
+        
+    Next WorkSheet
+    
+End Sub
